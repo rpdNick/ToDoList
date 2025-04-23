@@ -1,0 +1,28 @@
+.footer {
+    padding: 15px;
+    text-align: center;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    color: #777;
+    font-size: 0.9rem;
+
+    .task-count {
+        font-weight: 600;
+        color: var(--primary);
+    }
+
+    .clear-all {
+        margin-top: 10px;
+        background-color: transparent;
+        color: var(--secondary);
+        border: 1px solid var(--secondary);
+        padding: 8px 15px;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        transition: all 0.3s;
+
+        &:hover {
+            background-color: var(--secondary);
+            color: white;
+        }
+    }
+}

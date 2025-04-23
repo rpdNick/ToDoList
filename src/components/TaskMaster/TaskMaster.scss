@@ -1,0 +1,74 @@
+.to_do_container {
+    width: 100%;
+    max-width: 600px;
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+
+    .header {
+        background-color: var(--primary);
+        color: white;
+        padding: 30px;
+        text-align: center;
+        position: relative;
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+        }
+
+        p {
+            opacity: 0.8;
+            font-size: 1rem;
+        }
+    }
+
+    .form-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 20px;
+        background-color: rgba(0, 0, 0, 0.03);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .task-input {
+        flex-grow: 1;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: var(--border-radius);
+        font-size: 1rem;
+        transition: border-color 0.3s;
+    }
+
+    .task-input:focus {
+        outline: none;
+        border-color: var(--primary);
+    }
+
+    .add-btn {
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: background-color 0.3s;
+    }
+
+    .add-btn:hover {
+        background-color: var(--primary-dark);
+    }
+
+    .tasks-container {
+        position: relative;
+        padding: 20px;
+        max-height: 400px;
+        overflow-y: auto;
+        max-width: 100%;
+        overscroll-behavior: contain;
+        contain: layout; // ізоляція розмітки, щоб дитячі елементи не впливали на scroll
+    }
+}
