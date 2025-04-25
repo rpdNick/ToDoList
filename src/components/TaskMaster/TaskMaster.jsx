@@ -14,7 +14,7 @@ const TaskMaster = () => {
         setTaskValue(taskValue);
     }
 
-    const addNewTask = (e) => {
+    const addNewTask = () => {
         if (taskValue.trim() === "") return;
         dispatch(addTask(taskValue)); // set action into store
         setTaskValue(''); // clear input
@@ -32,10 +32,12 @@ const TaskMaster = () => {
                 <input type="text" className="task-input" id="task-input"
                     onChange={getTaskValue}
                     onKeyDown={(e) => (
-                        e.keyCode === 13 ? addNewTask() : null
+                        e.key === 'Enter' ? addNewTask() : null
                     )}
                     value={taskValue}
-                    placeholder="Add a new task..." required />
+                    placeholder="Add a new task..."
+                    required
+                />
                 <button type="submit" className="add-btn" onClick={addNewTask}>Add Task</button>
             </div>
 

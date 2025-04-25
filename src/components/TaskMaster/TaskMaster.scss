@@ -67,8 +67,5 @@
         padding: 20px;
         max-height: 400px;
         overflow-y: auto;
-        max-width: 100%;
-        overscroll-behavior: contain;
-        contain: layout; // ізоляція розмітки, щоб дитячі елементи не впливали на scroll
     }
 }

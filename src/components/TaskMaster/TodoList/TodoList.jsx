@@ -1,7 +1,10 @@
 import './TodoList.scss';
+import { useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { deleteTask, toggleTask, reorderTasks } from '../../../store/actionCreators/TodoActionsCreator';
+import { reorderTasks } from '../../../store/actionCreators/TodoActionsCreator';
 import TodoListEmpty from '../TodoListEmpty/TodoListEmpty';
+import SortableItem from '../SortableItem/SortableItem';
+import TaskItem from '../TaskItem/TaskItem';
 
 import {
     DndContext,
@@ -12,90 +15,68 @@ import {
 } from '@dnd-kit/core';
 
 import {
-    arrayMove,
     SortableContext,
-    useSortable,
     verticalListSortingStrategy,
+    arrayMove
 } from '@dnd-kit/sortable';
 
-import { CSS } from '@dnd-kit/utilities';
-
-import { restrictToVerticalAxis, restrictToWindowEdges  } from '@dnd-kit/modifiers';
-
-const SortableItem = ({ task, index }) => {
-    const dispatch = useDispatch();
-    const {
-        attributes,
-        listeners,
-        setNodeRef,
-        transform,
-        transition,
-        isDragging,
-    } = useSortable({ id: task.id });
-
-    const style = {
-        transform: CSS.Transform.toString(transform),
-        transition,
-        opacity: isDragging ? 0.8 : 1,
-    };
-
-    return (
-        <li ref={setNodeRef} style={style} className="task-item">
-            <span className="drag-handle" {...attributes} {...listeners}>⠿</span>
-            <div className='item_content'>
-                <span className="task_number">{index + 1}.</span>
-                <input
-                    type="checkbox"
-                    className="task-checkbox"
-                    checked={task.completed}
-                    onChange={() => dispatch(toggleTask(task.id))}
-                />
-                <span className={`task-content ${task.completed ? "completed" : ""}`}>{task.text}</span>
-                <button className="delete-btn" onClick={() => dispatch(deleteTask(task.id))}>×</button>
-            </div>
-        </li>
-    );
-};
-
+import CustomDragOverlay from '../../CustomDragOverlay/CustomDragOverlay';
+import { restrictToVerticalAxis, restrictToParentElement } from '@dnd-kit/modifiers';
 
 const TodoList = () => {
     const tasks = useSelector((state) => state.tasks);
     const dispatch = useDispatch();
+    const [activeTask, setActiveTask] = useState(null);
 
     const sensors = useSensors(useSensor(PointerSensor));
 
-    const handleDragEnd = (event) => {
-        const { active, over } = event;
-
-        if (active.id !== over?.id) {
-            const oldIndex = tasks.findIndex(task => task.id === active.id);
-            const newIndex = tasks.findIndex(task => task.id === over?.id);
-            const reorderedTasks = arrayMove(tasks, oldIndex, newIndex);
-            dispatch(reorderTasks(reorderedTasks));
-        }
+    const handleDragStart = ({ active }) => {
+        const task = tasks.find(t => t.id === active.id);
+        setActiveTask(task || null);
     };
 
-    if (tasks.length === 0) {
-        return <TodoListEmpty />;
-    }
+    const handleDragEnd = ({ active, over }) => {
+        setActiveTask(null);
+
+        if (active.id !== over?.id) {
+            const oldIndex = tasks.findIndex(t => t.id === active.id);
+            const newIndex = tasks.findIndex(t => t.id === over.id);
+            dispatch(reorderTasks(arrayMove(tasks, oldIndex, newIndex)));
+        }
+    };
+    console.log(tasks);
+
+    if (tasks.length === 0) return <TodoListEmpty />;
 
     return (
         <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
-            modifiers={[restrictToVerticalAxis, restrictToWindowEdges]}
+            modifiers={[restrictToVerticalAxis, restrictToParentElement]}
+            onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
         >
             <SortableContext
                 items={tasks.map(task => task.id)}
                 strategy={verticalListSortingStrategy}
             >
-                <ul className="task-list" id="task-list">
+                <ul className="task-list">
                     {tasks.map((task, index) => (
                         <SortableItem key={task.id} task={task} index={index} />
                     ))}
                 </ul>
             </SortableContext>
+
+            <CustomDragOverlay>
+                {activeTask && (
+                    <TaskItem
+                        task={activeTask}
+                        index={tasks.findIndex(t => t.id === activeTask.id)}
+                        onToggle={() => { }}
+                        onDelete={() => { }}
+                    />
+                )}
+            </CustomDragOverlay>
         </DndContext>
     );
 };
