@@ -9,9 +9,11 @@ import TaskItem from '../TaskItem/TaskItem';
 import {
     DndContext,
     closestCenter,
-    PointerSensor,
     useSensor,
     useSensors,
+    PointerSensor,
+    TouchSensor,
+    MouseSensor,
 } from '@dnd-kit/core';
 
 import {
@@ -28,7 +30,13 @@ const TodoList = () => {
     const dispatch = useDispatch();
     const [activeTask, setActiveTask] = useState(null);
 
-    const sensors = useSensors(useSensor(PointerSensor));
+    const sensors = useSensors(
+        useSensor(PointerSensor),
+        useSensor(TouchSensor),
+        useSensor(MouseSensor)
+    );
+
+    console.log(sensors);
 
     const handleDragStart = ({ active }) => {
         const task = tasks.find(t => t.id === active.id);
@@ -44,7 +52,7 @@ const TodoList = () => {
             dispatch(reorderTasks(arrayMove(tasks, oldIndex, newIndex)));
         }
     };
-    console.log(tasks);
+    // console.log(tasks);
 
     if (tasks.length === 0) return <TodoListEmpty />;
 

@@ -21,6 +21,7 @@ const SortableItem = ({ task, index }) => {
         position: 'relative',
         opacity: isDragging ? 0.8 : 1,
         zIndex: isDragging ? 1 : 0,
+        cursor: isDragging ? 'grabbing' : 'grab' 
     };
 
     return (
