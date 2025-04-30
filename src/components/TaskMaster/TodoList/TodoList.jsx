@@ -72,8 +72,6 @@ const TodoList = () => {
                     <TaskItem
                         task={activeTask}
                         index={tasks.findIndex(t => t.id === activeTask.id)}
-                        onToggle={() => { }}
-                        onDelete={() => { }}
                     />
                 )}
             </CustomDragOverlay>

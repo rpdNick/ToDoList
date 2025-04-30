@@ -18,7 +18,9 @@ const SortableItem = ({ task, index }) => {
     const style = {
         transform: CSS.Transform.toString(transform),
         transition,
+        position: 'relative',
         opacity: isDragging ? 0.8 : 1,
+        zIndex: isDragging ? 1 : 0,
     };
 
     return (

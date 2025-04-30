@@ -1,7 +1,6 @@
 import { createPortal } from 'react-dom';
 import { useEffect, useRef, useState } from 'react';
 import { DragOverlay } from '@dnd-kit/core';
-import './CustomDragOverlay.scss';
 
 const CustomDragOverlay = ({ children }) => {
     const containerRef = useRef(null);
